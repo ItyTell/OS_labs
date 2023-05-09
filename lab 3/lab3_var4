@@ -1,0 +1,37 @@
+import threading
+import numpy as np
+import time
+import random
+
+
+def mltpl(A, B, i, j, result):
+    res = A[i] * (B.T[j])
+    time.sleep(random.random())
+    time.sleep(random.random())
+    time.sleep(random.random())
+    result[i][j] = res.sum()
+
+    print("\n\n",result, "\n\n")
+
+def main():
+    n = 3
+    m = 4
+    k = 5
+    A = np.arange(n*m).reshape((n,m))
+
+    B = np.arange(m*k).reshape((m,k))
+    result = np.zeros((n, k))
+    threds = []
+
+    print(A)
+    print()
+    print(B)
+    print()
+    
+    for i in range(n):
+        for j in range(k):
+            threds.append(threading.Thread(target=mltpl, args=[A, B, i, j, result]))
+    for i in range(n * k):
+        threds[i].start()
+
+main()

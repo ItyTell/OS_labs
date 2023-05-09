@@ -1,5 +1,6 @@
 import threading
 import time
+import random
 
 
 
@@ -8,15 +9,17 @@ def f1(sleeping_time, return_val, result, index, endable=True):
     while not endable:
         time.sleep(sleeping_time)
     
+    time.sleep(random.random() / 10)
     print(f"thred number {index} completed the work")
     result.append(return_val)
     
 
 
 def main():
+    
     result = []
-    p1 = threading.Thread(target=f1,args=[2, 0, result, 0, False], daemon=True)
-    p2 = threading.Thread(target=f1,args=[20, 1, result, 1, True], daemon=True)
+    p1 = threading.Thread(target=f1,args=[4, 0, result, 0, True], daemon=True)
+    p2 = threading.Thread(target=f1,args=[15, 1, result, 1, False], daemon=True)
 
 
     p1.start()
@@ -29,6 +32,7 @@ def main():
             if ask == "n":
                 return "Cululation was not completed" 
             time1 = time.time()
+
 
     if p1.is_alive():
         p1, p2 = p2, p1
