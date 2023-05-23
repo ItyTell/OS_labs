@@ -6,52 +6,43 @@ class Memory:
 
     def __init__(self, X):
         self.list = X
-        self.mutex = [1] * len(X)
+        self.mutex = [1]
     
-    def take_cell(self, index):
+    def take_cell(self):
         time.sleep(random.random()/10)
-        while not self.mutex[index]:
+        while not self.mutex[0]:
             time.sleep(random.random())
-        self.mutex[index] = 0
-        return self.list[index]
+        self.mutex[0] = 0
+        return self.list
         
-    def put_cell(self, index, val):
-        if self.mutex[index]:
-            self.take_cell(index)
-        self.list[index] = val
-        self.mutex[index] = 1
+    def put_cell(self):
+        self.mutex[0] = 1
     
-    def write_val(self, val):
-        for index, mut in enumerate(self.mutex):
-            if mut:
-                self.mutex[index] = 0
-                self.list[index] = val
-                break
-        return index
 
-
-def f(sleeping_time, index, endable=True):
-    time.sleep(sleeping_time)
-    while not endable:
-        time.sleep(sleeping_time)
     
-    
-def f1(sleeping_time, return_val, index, X, endable=True):
-    f(sleeping_time, index, endable)
-    print(f"thred number {index} completed the work")
-    #result.append(return_val)
+def f1(mem, result):
+    X = mem.take_cell()
+    for i in range(100):
+        time.sleep(0.001)
+        X[0] += 1
+    result.append(X[0])
+    mem.put_cell()
 
+def f2(mem, result):
+    X = mem.take_cell()
+    for i in range(100):
+        time.sleep(0.001)
+        X[0] -= 1
+    result.append(X[0])
+    mem.put_cell()
 
-N = 10 # memory len
-X = [random.randint(1, 10) for i in range(N)] 
+X = [0] 
 mem = Memory(X)
-index = mem.write_val(10.5)
-print(index, mem.list)
 
 def main():
     result = []
-    p1 = threading.Thread(target=f1,args=[2, 0, result, 0, X, True], daemon=True)
-    p2 = threading.Thread(target=f1,args=[20, 1, result, 1, X, True], daemon=True)
+    p1 = threading.Thread(target=f1,args=[mem, result], daemon=True)
+    p2 = threading.Thread(target=f2,args=[mem, result], daemon=True)
 
 
     p1.start()
@@ -81,5 +72,5 @@ def main():
         return f"The answer is {result[0] * result[1]}"
 
 
-#print(main())
+print(main())
 
