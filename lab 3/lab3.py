@@ -24,7 +24,6 @@ class Memory:
 def f1(mem, result):
     x = mem.take_cell()
     for i in range(100):
-        time.sleep(0.001)
         x += 1
     result.append(x)
     mem.put_cell(x)
@@ -32,7 +31,6 @@ def f1(mem, result):
 def f2(mem, result):
     x = mem.take_cell()
     for i in range(100):
-        time.sleep(0.001)
         x += 1
     result.append(x)
     mem.put_cell(x)
