@@ -13,28 +13,29 @@ class Memory:
         while not self.mutex[0]:
             time.sleep(random.random())
         self.mutex[0] = 0
-        return self.list
+        return self.list[0]
         
-    def put_cell(self):
+    def put_cell(self, value):
+        self.list[0] = value
         self.mutex[0] = 1
     
 
     
 def f1(mem, result):
-    X = mem.take_cell()
+    x = mem.take_cell()
     for i in range(100):
         time.sleep(0.001)
-        X[0] += 1
-    result.append(X[0])
-    mem.put_cell()
+        x += 1
+    result.append(x)
+    mem.put_cell(x)
 
 def f2(mem, result):
-    X = mem.take_cell()
+    x = mem.take_cell()
     for i in range(100):
         time.sleep(0.001)
-        X[0] -= 1
-    result.append(X[0])
-    mem.put_cell()
+        x += 1
+    result.append(x)
+    mem.put_cell(x)
 
 X = [0] 
 mem = Memory(X)
